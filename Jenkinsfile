@@ -3,7 +3,7 @@ pipeline {
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
-        docker_hub_login = credentials('docker-hub-credentials-id')
+        docker_hub_login = credentials('ujebkhan737@gmail.com:mynameisujeb@123')
         JAVA_HOME = tool 'java-8'
     }
     stages {
