@@ -38,7 +38,7 @@ pipeline {
                       //  app.push("latest")
                     docker.withRegistry('',docker_hub_login) {
                         def app = docker.image(DOCKER_IMAGE_NAME)
-                        app.push()
+                        app.push("--debug")
                     }
                 }
             }
