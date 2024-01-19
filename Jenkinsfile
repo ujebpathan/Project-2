@@ -65,32 +65,10 @@
                   sh "cat train-schedule-kube.yaml"
                   sh "kubectl --kubeconfig=/home/ujeb/.kube/config get pods"
                //   sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deployment.yaml"
+                }    
+            }
         }
-      }
     }
-
-
-            
-           // when {
-           //     branch 'master'
-          //  }
-           // environment { 
-            //    CANARY_REPLICAS = 0
-            //}
-            //steps {
-                //input 'Deploy to Production?'
-               // milestone(1)
-               // kubernetesDeploy(
-                   // kubeconfigId: 'kubeconfig',
-                   // configs: 'train-schedule-kube-canary.yml',
-                 //   enableConfigSubstitution: true
-               // )
-                //kubernetesDeploy(
-               //     kubeconfigId: 'kubeconfig',
-              //      configs: 'train-schedule-kube.yml',
-             //       enableConfigSubstitution: true
-            //    )
-           // }
-  //      }
-//    }
 }
+
+
