@@ -73,7 +73,7 @@
 
                         // Your kubectl commands here
                         sh "kubectl get pods"
-                         sh "kubectl --kubeconfig=/home/ec2-user/config apply -f train-schedule-kube.yml"
+                         sh "kubectl  apply -f train-schedule-kube.yml"
 
                     }
                 }    
