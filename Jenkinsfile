@@ -1,4 +1,4 @@
-pipeline {
+    pipeline {
     agent any
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
@@ -38,7 +38,7 @@ pipeline {
                       //  app.push("latest")
                     docker.withRegistry('',docker_hub_login) {
                         def app = docker.image(DOCKER_IMAGE_NAME)
-                        app.push("--debug")
+                        app.push("latest")
                     }
                 }
             }
