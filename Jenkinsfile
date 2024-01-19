@@ -5,7 +5,7 @@
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
         docker_hub_login = 'docker-hub-credentials-id'
         JAVA_HOME = tool 'java-8'
-        KUBECONFIG_CREDS = 'kubeconfig-credentials-id'
+        KUBECONFIG_CREDS = credentials('kubeconfig-credentials-id')
     }
     stages {
         stage('Build') {
@@ -69,7 +69,8 @@
                     """
 
                     // Set KUBECONFIG environment variable
-                    withEnv(["KUBECONFIG=/tmp/kubeconfig"]) {
+                    withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
+
                         // Your kubectl commands here
                         sh "kubectl get pods"
                     }
