@@ -5,6 +5,7 @@
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
         docker_hub_login = 'docker-hub-credentials-id'
         JAVA_HOME = tool 'java-8'
+        KUBECONFIG_CREDS = 'kubeconfig-credentials-id'
     }
     stages {
         stage('Build') {
@@ -62,9 +63,16 @@
              steps{
                 script {
                 //  sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deployment.yaml"
-                 // sh "cat train-schedule-kube.yaml"
-                  sh "ls -l "
-                  sh "kubectl --kubeconfig=/home/ujeb/.kube/config get pods"
+                    sh "cat train-schedule-kube.yml"
+                    sh """
+                        echo '${KUBECONFIG_CREDS}' > /tmp/kubeconfig
+                    """
+
+                    // Set KUBECONFIG environment variable
+                    withEnv(["KUBECONFIG=/tmp/kubeconfig"]) {
+                        // Your kubectl commands here
+                        sh "kubectl get pods"
+                    }
                //   sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deployment.yaml"
                 }    
             }
