@@ -62,7 +62,7 @@
              steps{
                 script {
                 //  sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deployment.yaml"
-              //    sh "cat deployment.yaml"
+                  sh "cat train-schedule-kube.yaml"
                   sh "kubectl --kubeconfig=/home/ujeb/.kube/config get pods"
                //   sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deployment.yaml"
         }
