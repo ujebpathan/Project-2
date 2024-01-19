@@ -43,42 +43,54 @@
                 }
             }
         }
-        stage('CanaryDeploy') {
+       // stage('CanaryDeploy') {
           //  when {
            //     branch 'master'
            // }
-            environment { 
-                CANARY_REPLICAS = 1
-            }
-            steps {
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-            }
-        }
+        //    environment { 
+          //      CANARY_REPLICAS = 1
+          //  }
+          //  steps {
+           //     kubernetesDeploy(
+            //        kubeconfigId: 'kubeconfig',
+             //       configs: 'train-schedule-kube-canary.yml',
+              //      enableConfigSubstitution: true
+              //  )
+           // }
+      //  }
         stage('DeployToProduction') {
+             steps{
+                script {
+                //  sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deployment.yaml"
+              //    sh "cat deployment.yaml"
+                  sh "kubectl --kubeconfig=/home/ujeb/.kube/config get pods"
+               //   sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deployment.yaml"
+        }
+      }
+    }
+
+
+            
            // when {
            //     branch 'master'
           //  }
-            environment { 
-                CANARY_REPLICAS = 0
-            }
-            steps {
-                input 'Deploy to Production?'
-                milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
-            }
+           // environment { 
+            //    CANARY_REPLICAS = 0
+            //}
+            //steps {
+                //input 'Deploy to Production?'
+               // milestone(1)
+               // kubernetesDeploy(
+                   // kubeconfigId: 'kubeconfig',
+                   // configs: 'train-schedule-kube-canary.yml',
+                 //   enableConfigSubstitution: true
+               // )
+                //kubernetesDeploy(
+               //     kubeconfigId: 'kubeconfig',
+              //      configs: 'train-schedule-kube.yml',
+             //       enableConfigSubstitution: true
+            //    )
+           // }
         }
     }
 }
