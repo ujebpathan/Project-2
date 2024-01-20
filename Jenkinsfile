@@ -49,11 +49,11 @@
         remote.user = 'ujeb'
         remote.password = 'ujeb'
         remote.allowAnyHosts = true
-          stage('Put k8s-spring-boot-deployment.yml onto k8smaster') {
+          steps {
             sshPut remote: remote, from: 'train-schedule-kube.yml', into: '.'
             }
 
-          stage('Deploy spring boot') {
+          steps {
             sshCommand remote: remote, command: "train-schedule-kube.yml"
             }
          }
