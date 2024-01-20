@@ -4,7 +4,6 @@
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
         docker_hub_login = 'docker-hub-credentials-id'
         JAVA_HOME = tool 'java-8'
-        KUBECONFIG_CREDS = credentials('k8s-id')
     }
     stages {
         stage('Build') {
