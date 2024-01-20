@@ -4,7 +4,7 @@
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
         docker_hub_login = 'docker-hub-credentials-id'
         JAVA_HOME = tool 'java-8'
-        KUBECONFIG_CREDS = credentials('kubeconfig-credentials-id')
+        KUBECONFIG_CREDS = credentials('k8s-id')
     }
     stages {
         stage('Build') {
@@ -52,7 +52,7 @@
             }
             steps {
                 kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig-credentials-id',
+                    kubeconfigId: 'k8s-id',
                     configs: 'train-schedule-kube-canary.yml',
                     enableConfigSubstitution: true
                 )
@@ -69,12 +69,12 @@
                 input 'Deploy to Production?'
                 milestone(1)
                 kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig-credentials-id',
+                    kubeconfigId: 'k8s-id',
                     configs: 'train-schedule-kube-canary.yml',
                     enableConfigSubstitution: true
                 )
                 kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig-credentials-id',
+                    kubeconfigId: 'k8s-id',
                     configs: 'train-schedule-kube.yml',
                     enableConfigSubstitution: true
                 )
