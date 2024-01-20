@@ -42,20 +42,22 @@
                 }
             }
         }
-         stage("SSH Into k8s Server") {
-        def remote = [:]
-        remote.name = 'K8S master'
-        remote.host = '172.26.11.88'
-        remote.user = 'ujeb'
-        remote.password = 'ujeb'
-        remote.allowAnyHosts = true
-          steps {
-            sshPut remote: remote, from: 'train-schedule-kube.yml', into: '.'
-            }
+      stage("SSH Into k8s Server") {
+            steps {
+                script {
+                    def remote = [:]
+                    remote.name = 'K8S master'
+                    remote.host = '172.26.11.88'
+                    remote.user = 'ujeb'
+                    remote.password = 'ujeb'
+                    remote.allowAnyHosts = true
 
-          steps {
-            sshCommand remote: remote, command: "train-schedule-kube.yml"
+                    // Copy the Kubernetes YAML file to the remote server
+                    sshPut remote: remote, from: 'train-schedule-kube.yml', into: '.'
+
+                    // Deploy the Kubernetes YAML file using kubectl
+                    sshCommand remote: remote, command: "kubectl apply -f train-schedule-kube.yml"
+                }
             }
-         }
+        }
     }
-}
