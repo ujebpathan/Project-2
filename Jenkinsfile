@@ -54,7 +54,7 @@
                     """
 
                     withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
-                    sh "kubectl  apply -f train-schedule-kube.yml"
+                    sh "kubectl  apply -f train-schedule-kube-canary.yml"
 
                     }
                 }    
