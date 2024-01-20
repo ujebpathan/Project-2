@@ -42,42 +42,20 @@
                 }
             }
         }
-        stage('CanaryDeploy') {
-       //     when {
-        //        branch 'master'
-        //    }
-            environment { 
-              CANARY_REPLICAS = 1
+         stage("SSH Into k8s Server") {
+        def remote = [:]
+        remote.name = 'K8S master'
+        remote.host = '172.26.11.88'
+        remote.user = 'ujeb'
+        remote.password = 'ujeb'
+        remote.allowAnyHosts = true
+          stage('Put k8s-spring-boot-deployment.yml onto k8smaster') {
+            sshPut remote: remote, from: 'train-schedule-kube.yml', into: '.'
             }
-            steps {
-                kubernetesDeploy(
-                    kubeconfigId: 'k8s-id',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
+
+          stage('Deploy spring boot') {
+            sshCommand remote: remote, command: "train-schedule-kube.yml"
             }
-        }
-        stage('DeployToProduction') {
-           // when {
-           //     branch 'master'
-           // }
-            environment { 
-                CANARY_REPLICAS = 0
-            }
-            steps {
-                input 'Deploy to Production?'
-                milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'k8s-id',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-                kubernetesDeploy(
-                    kubeconfigId: 'k8s-id',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
-            }
-        }
+         }
     }
 }
