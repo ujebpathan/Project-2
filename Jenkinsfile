@@ -57,7 +57,8 @@
 
                     // Deploy the Kubernetes YAML file using kubectl
                     sshCommand remote: remote, command: "kubectl apply -f train-schedule-kube.yml"
-                }
+                  }
             }
-        }
+      }
     }
+ }
