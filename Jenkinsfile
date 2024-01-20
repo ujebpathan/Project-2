@@ -1,7 +1,6 @@
     pipeline {
     agent any
     environment {
-        //be sure to replace "bhavukm" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
         docker_hub_login = 'docker-hub-credentials-id'
         JAVA_HOME = tool 'java-8'
@@ -44,36 +43,32 @@
                 }
             }
         }
-       // stage('CanaryDeploy') {
-          //  when {
-           //     branch 'master'
-           // }
-        //    environment { 
-          //      CANARY_REPLICAS = 1
-          //  }
-          //  steps {
-           //     kubernetesDeploy(
-            //        kubeconfigId: 'kubeconfig',
-             //       configs: 'train-schedule-kube-canary.yml',
-              //      enableConfigSubstitution: true
-              //  )
-           // }
-      //  }
-        stage('DeployToProduction') {
-             steps{
+        stage('CanaryDeploy') {
+            environment { 
+                CANARY_REPLICAS = 1
+            }
+            steps{
                 script {
-                //  sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deployment.yaml"
-                    sh "cat train-schedule-kube.yml"
                     sh """
                         echo '${KUBECONFIG_CREDS}' > /tmp/kubeconfig
                     """
 
-                    // Set KUBECONFIG environment variable
                     withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
+                    sh "kubectl  apply -f train-schedule-kube.yml"
 
-                        // Your kubectl commands here
-                        sh "kubectl get pods"
-                         sh "kubectl  apply -f train-schedule-kube.yml"
+                    }
+                }    
+            }
+        }
+        stage('DeployToProduction') {
+             steps{
+                script {
+                    sh """
+                        echo '${KUBECONFIG_CREDS}' > /tmp/kubeconfig
+                    """
+
+                    withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
+                    sh "kubectl  apply -f train-schedule-kube.yml"
 
                     }
                 }    
