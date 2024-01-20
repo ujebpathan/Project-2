@@ -1,4 +1,5 @@
-    pipeline {
+
+ pipeline {
     agent any
     environment {
         DOCKER_IMAGE_NAME = "ujebpathan/train-schedule"
@@ -44,37 +45,41 @@
             }
         }
         stage('CanaryDeploy') {
-            environment { 
+       //     when {
+        //        branch 'master'
+        //    }
+         //   environment { 
                 CANARY_REPLICAS = 1
             }
-            steps{
-                script {
-                    sh """
-                        echo '${KUBECONFIG_CREDS}' > /tmp/kubeconfig
-                    """
-
-                    withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
-                    sh "kubectl apply -f train-schedule-kube-canary.yml --validate=false"
-
-                    }
-                }    
+            steps {
+                kubernetesDeploy(
+                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    configs: 'train-schedule-kube-canary.yml',
+                    enableConfigSubstitution: true
+                )
             }
         }
         stage('DeployToProduction') {
-             steps{
-                script {
-                    sh """
-                        echo '${KUBECONFIG_CREDS}' > /tmp/kubeconfig
-                    """
-
-                    withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG_CREDS')]) {
-                    sh "kubectl apply -f train-schedule-kube-canary.yml --validate=false"
-
-                    }
-                }    
+           // when {
+           //     branch 'master'
+           // }
+            environment { 
+                CANARY_REPLICAS = 0
+            }
+            steps {
+                input 'Deploy to Production?'
+                milestone(1)
+                kubernetesDeploy(
+                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    configs: 'train-schedule-kube-canary.yml',
+                    enableConfigSubstitution: true
+                )
+                kubernetesDeploy(
+                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    configs: 'train-schedule-kube.yml',
+                    enableConfigSubstitution: true
+                )
             }
         }
     }
 }
-
-
