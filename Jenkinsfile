@@ -1,4 +1,3 @@
-
  pipeline {
     agent any
     environment {
@@ -48,8 +47,8 @@
        //     when {
         //        branch 'master'
         //    }
-         //   environment { 
-                CANARY_REPLICAS = 1
+            environment { 
+              CANARY_REPLICAS = 1
             }
             steps {
                 kubernetesDeploy(
