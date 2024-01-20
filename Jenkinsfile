@@ -52,7 +52,7 @@
             }
             steps {
                 kubernetesDeploy(
-                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    kubeconfigId: 'kubeconfig-credentials-id',
                     configs: 'train-schedule-kube-canary.yml',
                     enableConfigSubstitution: true
                 )
@@ -69,12 +69,12 @@
                 input 'Deploy to Production?'
                 milestone(1)
                 kubernetesDeploy(
-                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    kubeconfigId: 'kubeconfig-credentials-id',
                     configs: 'train-schedule-kube-canary.yml',
                     enableConfigSubstitution: true
                 )
                 kubernetesDeploy(
-                    kubeconfigId: 'KUBECONFIG_CREDS',
+                    kubeconfigId: 'kubeconfig-credentials-id',
                     configs: 'train-schedule-kube.yml',
                     enableConfigSubstitution: true
                 )
